@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define INITIALPOPULATIONNUMBER 40000
-#define RANGE 50
-#define RESULT 100
+#define INITIALPOPULATIONNUMBER 50000
+#define RANGE 30
+#define RESULT 59
 #define LIMIT 10000
+#define MUTATECHANGE 10
 
 struct Equation{
 
@@ -18,6 +19,7 @@ int order = 0;
 int worstOrder1 = 0;
 int worstOrder2 = 0;
 int version = 1;
+int mutateChange = 0; // every 5 change mutate current equation
 struct Fitness{
 
     equation* equation;
@@ -32,6 +34,7 @@ Fitness* fitness(equation* array);
 int crossOver(equation* array);
 Fitness* unFitness(equation* array);
 int createRandomNumber();
+void mutate(equation* member);
 
 int main() {
 
@@ -87,6 +90,7 @@ Fitness* fitness(equation* array){
 }
 int crossOver(equation* array){
 
+    mutateChange++;
     equation* child = malloc(sizeof(equation));
     Fitness* equation1 = malloc(sizeof(Fitness));
 
@@ -122,6 +126,11 @@ int crossOver(equation* array){
     int result = calculateEquation(child->a,child->b,child->c,child->d,child->e,child->f);
     child->score = abs(RESULT-result);
 
+    if (mutateChange == MUTATECHANGE){
+        mutate(child);
+        mutateChange = 0;
+    }
+
     if(order == 0){
         array[equation1->i] = *child;
         order = 1;
@@ -152,5 +161,13 @@ Fitness* unFitness(equation* array){
 }
 int createRandomNumber(){
     return rand() % RANGE;
+}
+void mutate(equation* member){
+    int b = member->b;
+    member->b = member->f;
+    member->f = b;
+    int result = calculateEquation(member->a,member->b,member->c,member->d,member->e,member->f);
+    member->score = abs(RESULT - result);
+
 }
 
