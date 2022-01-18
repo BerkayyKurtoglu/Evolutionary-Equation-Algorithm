@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define INITIALPOPULATIONNUMBER 40000
 #define RANGE 50
-#define RESULT 30
+#define RESULT 100
 #define LIMIT 10000
 
 struct Equation{
@@ -30,6 +31,7 @@ int calculateEquation(int a,int b, int c, int d, int e, int f);
 Fitness* fitness(equation* array);
 int crossOver(equation* array);
 Fitness* unFitness(equation* array);
+int createRandomNumber();
 
 int main() {
 
@@ -51,12 +53,12 @@ void createEquationsRandomly(equation* array){
 
     for (int i = 0; i < INITIALPOPULATIONNUMBER; ++i) {
 
-        equation1->a = rand() % RANGE;
-        equation1->b = rand() % RANGE;
-        equation1->c = rand() %RANGE;
-        equation1->d = rand() %RANGE;
-        equation1->e = rand() %RANGE;
-        equation1->f = rand() %RANGE;
+        equation1->a = createRandomNumber();
+        equation1->b = createRandomNumber();
+        equation1->c = createRandomNumber();
+        equation1->d = createRandomNumber();
+        equation1->e = createRandomNumber();
+        equation1->f = createRandomNumber();
 
         int result = calculateEquation(equation1->a,equation1->b,equation1->c,equation1->d,equation1->e,equation1->f);
         //printf(" %d. result is %d \n",i+1,result);
@@ -109,7 +111,6 @@ int crossOver(equation* array){
         worstOrder2 = 1;
     }
     equation1 -> equation->score = score;
-    printf("Best 1 : %d, best 2 : %d\n",equation1->equation->score,equation2->equation->score);
 
     child->a = equation2->equation->d;
     child->b = equation2->equation->e;
@@ -129,11 +130,10 @@ int crossOver(equation* array){
         order = 0;
     }
 
-    version++;
-    printf("%d. Version a : %d, b : %d, c : %d, d : %d, e : %d, f : %d , Result : %d\n",
+    printf("%d. Generation a : %d, b : %d, c : %d, d : %d, e : %d, f : %d , Result : %d\n",
            version,child->a,child->b,child->c,child->d,child->e,child->f,
            calculateEquation(child->a,child->b,child->c,child->d,child->e,child->f));
-
+    version++;
     return child->score;
 
 }
@@ -150,5 +150,7 @@ Fitness* unFitness(equation* array){
     }
     return worst;
 }
-
+int createRandomNumber(){
+    return rand() % RANGE;
+}
 
