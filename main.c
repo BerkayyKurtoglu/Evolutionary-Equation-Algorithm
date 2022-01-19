@@ -2,31 +2,31 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define INITIALPOPULATIONNUMBER 50000
-#define RANGE 30
-#define RESULT 59
-#define LIMIT 10000
-#define MUTATECHANGE 10
+#define INITIALPOPULATIONNUMBER 40000
+#define RANGE 60
+#define RESULT 164
+#define LIMIT 12000
+#define MUTATECHANGE 20
 
-struct Equation{
-
-    int a,b,c,d,e,f;
-    int score;
-
-};
-typedef struct Equation equation;
 int order = 0;
 int worstOrder1 = 0;
 int worstOrder2 = 0;
 int version = 1;
-int mutateChange = 0; // every 5 change mutate current equation
-struct Fitness{
+int mutateChange = 20;
+
+typedef struct Equation{
+
+    int a,b,c,d,e,f;
+    int score;
+
+}equation;
+
+typedef struct Fitness{
 
     equation* equation;
     int i;
 
-};
-typedef struct Fitness Fitness;
+}Fitness;
 
 void createEquationsRandomly(equation* array);
 int calculateEquation(int a,int b, int c, int d, int e, int f);
@@ -127,6 +127,7 @@ int crossOver(equation* array){
     child->score = abs(RESULT-result);
 
     if (mutateChange == MUTATECHANGE){
+        printf("(Mutated) ");
         mutate(child);
         mutateChange = 0;
     }
